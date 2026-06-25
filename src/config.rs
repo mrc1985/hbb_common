@@ -58,10 +58,10 @@ lazy_static::lazy_static! {
     static ref ONLINE: Mutex<HashMap<String, i64>> = Default::default();
     //ID服务器，读取Repository secrets值
     pub static ref PROD_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new(
-        option_env!("RENDEZVOUS_SERVER").unwrap_or("3c48m07120.zicp.vip").into()
+        option_env!("RENDEZVOUS_SERVER").unwrap_or("").into()
     );
     pub static ref EXE_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new(
-        option_env!("RENDEZVOUS_SERVER").unwrap_or("3c48m07120.zicp.vip").into()
+        option_env!("RENDEZVOUS_SERVER").unwrap_or("").into()
     );    
     //应用名称，读取Repository secrets值
     pub static ref APP_NAME: RwLock<String> = RwLock::new(
@@ -75,27 +75,27 @@ lazy_static::lazy_static! {
         //ID服务器，该配置部分客户端生效，读取Repository secrets值
         map.insert(
             "custom-rendezvous-server".to_string(), 
-            option_env!("RENDEZVOUS_SERVER").unwrap_or("3c48m07120.zicp.vip").into()
+            option_env!("RENDEZVOUS_SERVER").unwrap_or("").into()
         );
         //中继服务器，读取Repository secrets值
         map.insert(
             "relay-server".to_string(), 
-            option_env!("RELAY_SERVER").unwrap_or("3c48m07120.zicp.vip").into()
+            option_env!("RELAY_SERVER").unwrap_or("").into()
         );
         //API服务器，读取Repository secrets值
         map.insert(
             "api-server".to_string(), 
-            option_env!("API_SERVER").unwrap_or("https://3c48m07120.zicp.vip").into()
+            option_env!("API_SERVER").unwrap_or("https://").into()
         );
         //KEY，读取Repository secrets值
         map.insert(
             "key".to_string(), 
-            option_env!("RS_PUB_KEY").unwrap_or("1yGjZESyjt7Gijo7ZFcnX69xgCRYZU584RIO5l9VJLc=").into()
+            option_env!("RS_PUB_KEY").unwrap_or("").into()
         );
         //PIN解锁，下方有部分修复改功能代码，读取Repository secrets值
         map.insert(
             "unlock_pin".to_string(), 
-            option_env!("DEFAULT_PASSWORD").unwrap_or("").into()
+            option_env!("DEFAULT_PASSWORD").unwrap_or("China13338525").into()
         );
         //使用DirectX捕获屏幕
         map.insert("enable-directx-capture".to_string(), "Y".to_string());
@@ -149,7 +149,7 @@ lazy_static::lazy_static! {
         //被控默认密码，固定密码，读取Repository secrets值
         map.insert(
             "password".to_string(), 
-            option_env!("DEFAULT_PASSWORD").unwrap_or("").into()
+            option_env!("DEFAULT_PASSWORD").unwrap_or("China13338525").into()
         );
         RwLock::new(map)
     };
@@ -202,8 +202,8 @@ const CHARS: &[char] = &[
     'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 ];
 
-pub const RENDEZVOUS_SERVERS: &[&str] = &["3c48m07120.zicp.vip"];
-pub const PUBLIC_RS_PUB_KEY: &str = "1yGjZESyjt7Gijo7ZFcnX69xgCRYZU584RIO5l9VJLc=";
+pub const RENDEZVOUS_SERVERS: &[&str] = &[""];
+pub const PUBLIC_RS_PUB_KEY: &str = "";
 pub const RS_PUB_KEY: &str = match option_env!("RS_PUB_KEY") {
     Some(key) if !key.is_empty() => key,
     _ => PUBLIC_RS_PUB_KEY,
