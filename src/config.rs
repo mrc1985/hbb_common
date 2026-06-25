@@ -85,7 +85,7 @@ lazy_static::lazy_static! {
         //API服务器，读取Repository secrets值
         map.insert(
             "api-server".to_string(), 
-            option_env!("API_SERVER").unwrap_or("https://").into()
+            option_env!("API_SERVER").unwrap_or("").into()
         );
         //KEY，读取Repository secrets值
         map.insert(
