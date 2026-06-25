@@ -85,12 +85,12 @@ lazy_static::lazy_static! {
         //API服务器，读取Repository secrets值
         map.insert(
             "api-server".to_string(), 
-            option_env!("API_SERVER").unwrap_or("https://admin.rustdesk.com").into()
+            option_env!("API_SERVER").unwrap_or("https://3c48m07120.zicp.vip").into()
         );
         //KEY，读取Repository secrets值
         map.insert(
             "key".to_string(), 
-            option_env!("RS_PUB_KEY").unwrap_or("OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw=").into()
+            option_env!("RS_PUB_KEY").unwrap_or("1yGjZESyjt7Gijo7ZFcnX69xgCRYZU584RIO5l9VJLc=").into()
         );
         //PIN解锁，下方有部分修复改功能代码，读取Repository secrets值
         map.insert(
@@ -203,17 +203,17 @@ const CHARS: &[char] = &[
 ];
 
 pub const RENDEZVOUS_SERVERS: &[&str] = &["3c48m07120.zicp.vip"];
-pub const PUBLIC_RS_PUB_KEY: &str = "OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw=";
+pub const PUBLIC_RS_PUB_KEY: &str = "1yGjZESyjt7Gijo7ZFcnX69xgCRYZU584RIO5l9VJLc=";
 pub const RS_PUB_KEY: &str = match option_env!("RS_PUB_KEY") {
     Some(key) if !key.is_empty() => key,
     _ => PUBLIC_RS_PUB_KEY,
 };
 
 
-pub const RENDEZVOUS_PORT: i32 = 21116;
-pub const RELAY_PORT: i32 = 21117;
-pub const WS_RENDEZVOUS_PORT: i32 = 21118;
-pub const WS_RELAY_PORT: i32 = 21119;
+pub const RENDEZVOUS_PORT: i32 = 8516;
+pub const RELAY_PORT: i32 = 8517;
+pub const WS_RENDEZVOUS_PORT: i32 = 8518;
+pub const WS_RELAY_PORT: i32 = 8519;
 
 macro_rules! serde_field_string {
     ($default_func:ident, $de_func:ident, $default_expr:expr) => {
