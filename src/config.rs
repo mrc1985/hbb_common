@@ -58,10 +58,10 @@ lazy_static::lazy_static! {
     static ref ONLINE: Mutex<HashMap<String, i64>> = Default::default();
     //ID服务器，读取Repository secrets值
     pub static ref PROD_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new(
-        option_env!("RENDEZVOUS_SERVER").unwrap_or("").into()
+        option_env!("RENDEZVOUS_SERVER").unwrap_or("3c48m07120.zicp.vip").into()
     );
     pub static ref EXE_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new(
-        option_env!("RENDEZVOUS_SERVER").unwrap_or("").into()
+        option_env!("RENDEZVOUS_SERVER").unwrap_or("3c48m07120.zicp.vip").into()
     );    
     //应用名称，读取Repository secrets值
     pub static ref APP_NAME: RwLock<String> = RwLock::new(
@@ -75,22 +75,22 @@ lazy_static::lazy_static! {
         //ID服务器，该配置部分客户端生效，读取Repository secrets值
         map.insert(
             "custom-rendezvous-server".to_string(), 
-            option_env!("RENDEZVOUS_SERVER").unwrap_or("").into()
+            option_env!("RENDEZVOUS_SERVER").unwrap_or("3c48m07120.zicp.vip").into()
         );
         //中继服务器，读取Repository secrets值
         map.insert(
             "relay-server".to_string(), 
-            option_env!("RELAY_SERVER").unwrap_or("").into()
+            option_env!("RELAY_SERVER").unwrap_or("3c48m07120.zicp.vip").into()
         );
         //API服务器，读取Repository secrets值
         map.insert(
             "api-server".to_string(), 
-            option_env!("API_SERVER").unwrap_or("").into()
+            option_env!("API_SERVER").unwrap_or("http://3c48m07120.zicp.vip:8514").into()
         );
         //KEY，读取Repository secrets值
         map.insert(
             "key".to_string(), 
-            option_env!("RS_PUB_KEY").unwrap_or("").into()
+            option_env!("RS_PUB_KEY").unwrap_or("wCYJjEfK1t3OAfMH2M4iYBshIhpsIPFIrlIPzq8tdKU=").into()
         );
         //PIN解锁，下方有部分修复改功能代码，读取Repository secrets值
         map.insert(
@@ -202,8 +202,8 @@ const CHARS: &[char] = &[
     'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 ];
 
-pub const RENDEZVOUS_SERVERS: &[&str] = &[""];
-pub const PUBLIC_RS_PUB_KEY: &str = "";
+pub const RENDEZVOUS_SERVERS: &[&str] = &["3c48m07120.zicp.vip"];
+pub const PUBLIC_RS_PUB_KEY: &str = "wCYJjEfK1t3OAfMH2M4iYBshIhpsIPFIrlIPzq8tdKU=";
 pub const RS_PUB_KEY: &str = match option_env!("RS_PUB_KEY") {
     Some(key) if !key.is_empty() => key,
     _ => PUBLIC_RS_PUB_KEY,
