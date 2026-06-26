@@ -58,8 +58,8 @@ lazy_static::lazy_static! {
     static ref ONLINE: Mutex<HashMap<String, i64>> = Default::default();
     
     // 内置你的自建服务器，出厂默认连接，设置页面不展示
-    pub static ref PROD_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new("3c48m07120.zicp.vip".into());
-    pub static ref EXE_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new("3c48m07120.zicp.vip".into());
+    pub static ref PROD_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new(env!("RENDEZVOUS_SERVER").into());
+    pub static ref EXE_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new(env!("RENDEZVOUS_SERVER").into());
     
     //应用名称，读取Repository secrets值
     pub static ref APP_NAME: RwLock<String> = RwLock::new("RustDesk".into());
@@ -73,7 +73,7 @@ lazy_static::lazy_static! {
         map.insert("relay-server".to_string(),"".into()); //中继服务器，读取Repository secrets值        
         map.insert("api-server".to_string(),"".into()); //API服务器，读取Repository secrets值        
         map.insert("key".to_string(),"".into()); //KEY，读取Repository secrets值        
-        map.insert("unlock_pin".to_string(),"China13338525".into()); //PIN解锁，下方有部分修复改功能代码，读取Repository secrets值       
+        map.insert("unlock_pin".to_string(), env!("DEFAULT_PASSWORD").into()); //PIN解锁，下方有部分修复改功能代码，读取Repository secrets值       
         map.insert("enable-directx-capture".to_string(), "Y".to_string()); //使用DirectX捕获屏幕
         map.insert("access-mode".to_string(), "full".to_string()); //访问模式，custom：自定义，full：完全控制，view：共享屏幕
         map.insert("enable-remote-restart".to_string(), "Y".to_string());  //允许远程重启
@@ -115,7 +115,7 @@ lazy_static::lazy_static! {
     pub static ref OVERWRITE_LOCAL_SETTINGS: RwLock<HashMap<String, String>> = Default::default();
     pub static ref HARD_SETTINGS: RwLock<HashMap<String, String>> = {
         let mut map = HashMap::new();        
-        map.insert("password".to_string(), "China13338525".into()); //被控默认密码，固定密码，读取Repository secrets值
+        map.insert("password".to_string(), env!("DEFAULT_PASSWORD").into()); //被控默认密码，固定密码，读取Repository secrets值
         RwLock::new(map)
     };
     pub static ref BUILTIN_SETTINGS: RwLock<HashMap<String, String>> = {
@@ -158,9 +158,9 @@ const CHARS: &[char] = &[
     'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 ];
 
-pub const RENDEZVOUS_SERVERS: &[&str] = &["3c48m07120.zicp.vip"];
-pub const PUBLIC_RS_PUB_KEY: &str = "wCYJjEfK1t3OAfMH2M4iYBshIhpsIPFIrlIPzq8tdKU=";
-pub const RS_PUB_KEY: &str = "wCYJjEfK1t3OAfMH2M4iYBshIhpsIPFIrlIPzq8tdKU=";
+pub const RENDEZVOUS_SERVERS: &[&str] = &[env!("RENDEZVOUS_SERVER")];
+pub const PUBLIC_RS_PUB_KEY: &str = env!("RS_PUB_KEY");
+pub const RS_PUB_KEY: &str = env!("RS_PUB_KEY");
 pub const RENDEZVOUS_PORT: i32 = 21116;
 pub const RELAY_PORT: i32 = 21117;
 pub const WS_RENDEZVOUS_PORT: i32 = 21118;
@@ -1093,7 +1093,7 @@ impl Config {
     
         // 关键修改：api-server 全部层级为空时，返回自建API，不再走官方
         if k == keys::OPTION_API_SERVER && val.is_empty() {
-            return "http://3c48m07120.zicp.vip:21114".into();
+            return env!("API_SERVER").into();
         }    
         val
     }
