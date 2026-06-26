@@ -56,63 +56,32 @@ lazy_static::lazy_static! {
     static ref STATUS: RwLock<Status> = RwLock::new(Status::load());
     static ref TRUSTED_DEVICES: RwLock<(Vec<TrustedDevice>, bool)> = Default::default();
     static ref ONLINE: Mutex<HashMap<String, i64>> = Default::default();
-    //ID服务器，读取Repository secrets值
-    pub static ref PROD_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new(
-        option_env!("RENDEZVOUS_SERVER").unwrap_or("3c48m07120.zicp.vip").into()
-    );
-    pub static ref EXE_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new(
-        option_env!("RENDEZVOUS_SERVER").unwrap_or("3c48m07120.zicp.vip").into()
-    );    
+    
+    // 内置你的自建服务器，出厂默认连接，设置页面不展示
+    pub static ref PROD_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new("3c48m07120.zicp.vip".into());
+    pub static ref EXE_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new("3c48m07120.zicp.vip".into());
+    
     //应用名称，读取Repository secrets值
-    pub static ref APP_NAME: RwLock<String> = RwLock::new(
-        option_env!("APP_NAME").unwrap_or("RustDesk").into()
-    );
+    pub static ref APP_NAME: RwLock<String> = RwLock::new("RustDesk".into());
+ 
     static ref KEY_PAIR: Mutex<Option<KeyPair>> = Default::default();
     static ref USER_DEFAULT_CONFIG: RwLock<(UserDefaultConfig, Instant)> = RwLock::new((UserDefaultConfig::load(), Instant::now()));
     pub static ref NEW_STORED_PEER_CONFIG: Mutex<HashSet<String>> = Default::default();
     pub static ref DEFAULT_SETTINGS: RwLock<HashMap<String, String>> = {
-        let mut map = HashMap::new();
-        //ID服务器，该配置部分客户端生效，读取Repository secrets值
-        map.insert(
-            "custom-rendezvous-server".to_string(), 
-            option_env!("RENDEZVOUS_SERVER").unwrap_or("3c48m07120.zicp.vip").into()
-        );
-        //中继服务器，读取Repository secrets值
-        map.insert(
-            "relay-server".to_string(), 
-            option_env!("RELAY_SERVER").unwrap_or("3c48m07120.zicp.vip").into()
-        );
-        //API服务器，读取Repository secrets值
-        map.insert(
-            "api-server".to_string(), 
-            option_env!("API_SERVER").unwrap_or("http://3c48m07120.zicp.vip:8514").into()
-        );
-        //KEY，读取Repository secrets值
-        map.insert(
-            "key".to_string(), 
-            option_env!("RS_PUB_KEY").unwrap_or("wCYJjEfK1t3OAfMH2M4iYBshIhpsIPFIrlIPzq8tdKU=").into()
-        );
-        //PIN解锁，下方有部分修复改功能代码，读取Repository secrets值
-        map.insert(
-            "unlock_pin".to_string(), 
-            option_env!("DEFAULT_PASSWORD").unwrap_or("China13338525").into()
-        );
-        //使用DirectX捕获屏幕
-        map.insert("enable-directx-capture".to_string(), "Y".to_string());
-        //访问模式，custom：自定义，full：完全控制，view：共享屏幕
-        map.insert("access-mode".to_string(), "full".to_string());
-        //允许远程重启
-        map.insert("enable-remote-restart".to_string(), "Y".to_string());
-        //允许远程修改配置
-        map.insert("allow-remote-config-modification".to_string(), "Y".to_string());
-        //接受远程方式，password：密码，click：点击，password-click：同时使用
-        map.insert("approve-mode".to_string(), "password".to_string());
-        //密码验证方式，use-temporary-password：一次性密码，use-permanent-password：固定密码，use-both-passwords：同时使用
-        map.insert("verification-method".to_string(), "use-permanent-password".to_string());
-        //隐藏连接管理窗口，approve-mode=password，verification-method=use-permanent-password，才可生效，项目中有修复代码
-        map.insert("allow-hide-cm".to_string(), "Y".to_string());
-        //隐藏托盘图标，approve-mode=password，verification-method=use-permanent-password，才可生效，项目中有修复代码
-        map.insert("hide-tray".to_string(), "Y".to_string());
+        let mut map = HashMap::new();        
+        map.insert("custom-rendezvous-server".to_string(),"".into()); //ID服务器，该配置部分客户端生效，读取Repository secrets值        
+        map.insert("relay-server".to_string(),"".into()); //中继服务器，读取Repository secrets值        
+        map.insert("api-server".to_string(),"".into()); //API服务器，读取Repository secrets值        
+        map.insert("key".to_string(),"".into()); //KEY，读取Repository secrets值        
+        map.insert("unlock_pin".to_string(),"China13338525".into()); //PIN解锁，下方有部分修复改功能代码，读取Repository secrets值       
+        map.insert("enable-directx-capture".to_string(), "Y".to_string()); //使用DirectX捕获屏幕
+        map.insert("access-mode".to_string(), "full".to_string()); //访问模式，custom：自定义，full：完全控制，view：共享屏幕
+        map.insert("enable-remote-restart".to_string(), "Y".to_string());  //允许远程重启
+        map.insert("allow-remote-config-modification".to_string(), "Y".to_string()); //允许远程修改配置
+        map.insert("approve-mode".to_string(), "password".to_string()); //接受远程方式，password：密码，click：点击，password-click：同时使用        
+        map.insert("verification-method".to_string(), "use-permanent-password".to_string()); //密码验证方式，use-temporary-password：一次性密码，use-permanent-password：固定密码，use-both-passwords：同时使用       
+        map.insert("allow-hide-cm".to_string(), "Y".to_string());  //隐藏连接管理窗口，approve-mode=password，verification-method=use-permanent-password，才可生效，项目中有修复代码        
+        map.insert("hide-tray".to_string(), "Y".to_string()); //隐藏托盘图标，approve-mode=password，verification-method=use-permanent-password，才可生效，项目中有修复代码
         RwLock::new(map)
     };
     pub static ref OVERWRITE_SETTINGS: RwLock<HashMap<String, String>> = Default::default();
@@ -145,31 +114,18 @@ lazy_static::lazy_static! {
     };
     pub static ref OVERWRITE_LOCAL_SETTINGS: RwLock<HashMap<String, String>> = Default::default();
     pub static ref HARD_SETTINGS: RwLock<HashMap<String, String>> = {
-        let mut map = HashMap::new();
-        //被控默认密码，固定密码，读取Repository secrets值
-        map.insert(
-            "password".to_string(), 
-            option_env!("DEFAULT_PASSWORD").unwrap_or("China13338525").into()
-        );
+        let mut map = HashMap::new();        
+        map.insert("password".to_string(), "China13338525".into()); //被控默认密码，固定密码，读取Repository secrets值
         RwLock::new(map)
     };
     pub static ref BUILTIN_SETTINGS: RwLock<HashMap<String, String>> = {
-        let mut map = HashMap::new();
-        //默认连接密码，请求控制的时候要求输入的密码，读取Repository secrets值
-        map.insert(
-            "default-connect-password".to_string(), 
-            option_env!("DEFAULT_PASSWORD").unwrap_or("").into()
-        );
-        //隐藏远程打印设置选项
-        map.insert("hide-remote-printer-settings".to_string(), "N".to_string());
-        //隐藏代理设置选项
-        map.insert("hide-proxy-settings".to_string(), "N".to_string());
-        //隐藏服务设置选项
-        map.insert("hide-server-settings".to_string(), "N".to_string());
-        //隐藏安全设置选项
-        map.insert("hide-security-settings".to_string(), "N".to_string());
-        //隐藏网络设置选项
-        map.insert("hide-network-settings".to_string(), "N".to_string());
+        let mut map = HashMap::new();        
+        map.insert("default-connect-password".to_string(), "".into()); //默认连接密码，请求控制的时候要求输入的密码，读取Repository secrets值
+        map.insert("hide-remote-printer-settings".to_string(), "N".to_string()); //隐藏远程打印设置选项        
+        map.insert("hide-proxy-settings".to_string(), "N".to_string()); //隐藏代理设置选项        
+        map.insert("hide-server-settings".to_string(), "N".to_string()); //隐藏服务设置选项        
+        map.insert("hide-security-settings".to_string(), "N".to_string()); //隐藏安全设置选项        
+        map.insert("hide-network-settings".to_string(), "N".to_string()); //隐藏网络设置选项
         RwLock::new(map)
     };
 }
@@ -204,16 +160,12 @@ const CHARS: &[char] = &[
 
 pub const RENDEZVOUS_SERVERS: &[&str] = &["3c48m07120.zicp.vip"];
 pub const PUBLIC_RS_PUB_KEY: &str = "wCYJjEfK1t3OAfMH2M4iYBshIhpsIPFIrlIPzq8tdKU=";
-pub const RS_PUB_KEY: &str = match option_env!("RS_PUB_KEY") {
-    Some(key) if !key.is_empty() => key,
-    _ => PUBLIC_RS_PUB_KEY,
-};
-
-
-pub const RENDEZVOUS_PORT: i32 = 8516;
-pub const RELAY_PORT: i32 = 8517;
-pub const WS_RENDEZVOUS_PORT: i32 = 8518;
-pub const WS_RELAY_PORT: i32 = 8519;
+pub const RS_PUB_KEY: &str = "wCYJjEfK1t3OAfMH2M4iYBshIhpsIPFIrlIPzq8tdKU=";
+pub const RENDEZVOUS_PORT: i32 = 21116;
+pub const RELAY_PORT: i32 = 21117;
+pub const WS_RENDEZVOUS_PORT: i32 = 21118;
+pub const WS_RELAY_PORT: i32 = 21119;
+pub const API_PORT: i32 = 21114;
 
 macro_rules! serde_field_string {
     ($default_func:ident, $de_func:ident, $default_expr:expr) => {
@@ -1121,16 +1073,31 @@ impl Config {
         config.store();
     }
 
+    // pub fn get_option(k: &str) -> String {
+    //     get_or(
+    //         &OVERWRITE_SETTINGS,
+    //         &CONFIG2.read().unwrap().options,
+    //         &DEFAULT_SETTINGS,
+    //         k,
+    //     )
+    //     .unwrap_or_default()
+    // }
     pub fn get_option(k: &str) -> String {
-        get_or(
+        let val = get_or(
             &OVERWRITE_SETTINGS,
             &CONFIG2.read().unwrap().options,
             &DEFAULT_SETTINGS,
             k,
         )
-        .unwrap_or_default()
+        .unwrap_or_default();
+    
+        // 关键修改：api-server 全部层级为空时，返回自建API，不再走官方
+        if k == keys::OPTION_API_SERVER && val.is_empty() {
+            return "http://3c48m07120.zicp.vip:21114".into();
+        }    
+        val
     }
-
+    
     pub fn get_bool_option(k: &str) -> bool {
         option2bool(k, &Self::get_option(k))
     }
